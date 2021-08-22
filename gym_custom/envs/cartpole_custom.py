@@ -58,7 +58,9 @@ class CartPoleEnv(gym.Env):
         Considered solved when the average return is greater than or equal to
         195.0 over 100 consecutive trials.
     """
-
+    device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+    length=0.5
+    ee_sub = torch.tensor([0.0, 0.0], device=device, dtype=torch.float)
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 50
@@ -97,7 +99,7 @@ class CartPoleEnv(gym.Env):
 
         self.steps_beyond_done = None
         
-        self.device='cpu' 
+        # self.device='cpu' 
         # self.device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         
 
@@ -105,17 +107,31 @@ class CartPoleEnv(gym.Env):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
     
-    def cost_o(self,o,tensor=True):
+    @staticmethod
+    def cost_o(o,tensor=True):
+        l=CartPoleEnv.length
+        sub=CartPoleEnv.ee_sub
         if tensor:
-            return -(-(torch.cat([o[:,:1]-self.length*o[:,1:2].sin(),-self.length*(o[:,1:2].cos()+1)])/self.length).pow(2).sum()).exp()
+            return -(-(((torch.cat([o[:,:1]-l*o[:,2:3].sin(),-l*(o[:,2:3].cos()+1)],dim=1)-sub)/l).pow(2)).sum(dim=1)).exp()
         else:
-            return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[1]),-self.length*(np.cos(o[1])+1)])/self.length)**2))
+            return -np.exp(-np.sum((np.array([o[0]-l*np.sin(o[2]),-l*(np.cos(o[2])+1)])/l)**2))
         
-    def cost_a(self,a,tensor=True):
+        # if tensor:
+        #     return -(-((torch.cat([o[:,:1]-self.length*o[:,2:3].sin(),-self.length*(o[:,2:3].cos()+1)],dim=1)/self.length).pow(2)).sum(dim=1)).exp()
+        # else:
+        #     return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))
+    
+    @staticmethod
+    def cost_a(a,tensor=True):
         if tensor:
-            return 0.01 * a.pow(2).sum(dim=1)
+            return torch.zeros(a.shape[0],device=CartPoleEnv.device) #0.01 * a.pow(2).sum(dim=1)
         else:
             return 0.01 * np.sum(a**2)
+        
+        # if tensor:
+        #     return 0.01 * a.pow(2).sum(dim=1)
+        # else:
+        #     return 0.01 * np.sum(a**2)
 
     def step(self, action):
         # err_msg = "%r (%s) invalid" % (action, type(action))
@@ -154,13 +170,13 @@ class CartPoleEnv(gym.Env):
         )
 
         if not done:
-            # reward = 1.0
-            reward = -self.cost_o(self.state,tensor=False) - self.cost_a(action,tensor=False)
+            reward = 1.0
+            # reward = -self.cost_o(self.state,tensor=False) - self.cost_a(action,tensor=False)
         elif self.steps_beyond_done is None:
             # Pole just fell!
             self.steps_beyond_done = 0
-            # reward = 1.0
-            reward = -self.cost_o(self.state,tensor=False) - self.cost_a(action,tensor=False)
+            reward = 1.0
+            # reward = -self.cost_o(self.state,tensor=False) - self.cost_a(action,tensor=False)
 
         else:
             if self.steps_beyond_done == 0:
