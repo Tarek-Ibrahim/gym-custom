@@ -97,9 +97,6 @@ class CartPoleEnv(gym.Env):
 
         self.steps_beyond_done = None
         
-        # self.device='cpu' 
-        # self.device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-        
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -108,27 +105,20 @@ class CartPoleEnv(gym.Env):
 
     def cost_o(self,o,tensor=True):
         if tensor:
-            return -tf.math.exp(-tf.math.reduce_sum(tf.math.square(tf.concat([o[:,:1]-self.length*tf.math.sin(o[:,2:3]),-self.length*(tf.math.cos(o[:,2:3])+1)],axis=1)),axis=1)/(self.length**2))
+            return tf.math.reduce_sum(tf.math.abs(o[:,2:3]),axis=1)
+            # return -tf.math.exp(-tf.math.reduce_sum(tf.math.square(tf.concat([o[:,:1]-self.length*tf.math.sin(o[:,2:3]),-self.length*(tf.math.cos(o[:,2:3])+1)],axis=1)),axis=1)/(self.length**2))
         else:
             return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))
-        
-        # if tensor:
-        #     return -(-((torch.cat([o[:,:1]-self.length*o[:,2:3].sin(),-self.length*(o[:,2:3].cos()+1)],dim=1)/self.length).pow(2)).sum(dim=1)).exp()
-        # else:
-        #     return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))
     
 
     def cost_a(self,a,tensor=True):
         if tensor:
-            return tf.zeros(tf.shape(a)[0]) #0.01 * a.pow(2).sum(dim=1)
+            return tf.zeros(tf.shape(a)[0]) 
+            # return 0.01 * a.pow(2).sum(dim=1)
         else:
             return 0.01 * np.sum(a**2)
         
-        # if tensor:
-        #     return 0.01 * a.pow(2).sum(dim=1)
-        # else:
-        #     return 0.01 * np.sum(a**2)
-
+        
     def step(self, action):
         # err_msg = "%r (%s) invalid" % (action, type(action))
         # assert self.action_space.contains(action), err_msg

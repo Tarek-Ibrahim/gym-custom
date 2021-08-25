@@ -58,9 +58,7 @@ class CartPoleEnv(gym.Env):
         Considered solved when the average return is greater than or equal to
         195.0 over 100 consecutive trials.
     """
-    device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    length=0.5
-    ee_sub = torch.tensor([0.0, 0.0], device=device, dtype=torch.float)
+
     metadata = {
         'render.modes': ['human', 'rgb_array'],
         'video.frames_per_second': 50
@@ -99,39 +97,29 @@ class CartPoleEnv(gym.Env):
 
         self.steps_beyond_done = None
         
-        # self.device='cpu' 
-        # self.device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
+        self.device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
         
-
+        
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
     
-    @staticmethod
-    def cost_o(o,tensor=True):
-        l=CartPoleEnv.length
-        sub=CartPoleEnv.ee_sub
-        if tensor:
-            return -(-(((torch.cat([o[:,:1]-l*o[:,2:3].sin(),-l*(o[:,2:3].cos()+1)],dim=1)-sub)/l).pow(2)).sum(dim=1)).exp()
-        else:
-            return -np.exp(-np.sum((np.array([o[0]-l*np.sin(o[2]),-l*(np.cos(o[2])+1)])/l)**2))
-        
-        # if tensor:
-        #     return -(-((torch.cat([o[:,:1]-self.length*o[:,2:3].sin(),-self.length*(o[:,2:3].cos()+1)],dim=1)/self.length).pow(2)).sum(dim=1)).exp()
-        # else:
-        #     return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))
     
-    @staticmethod
-    def cost_a(a,tensor=True):
+    def cost_o(self,o,tensor=True):
         if tensor:
-            return torch.zeros(a.shape[0],device=CartPoleEnv.device) #0.01 * a.pow(2).sum(dim=1)
+            return torch.abs(o[:,2:3]).sum(dim=1)
+            # return -(-((torch.cat([o[:,:1]-self.length*o[:,2:3].sin(),-self.length*(o[:,2:3].cos()+1)],dim=1)/self.length).pow(2)).sum(dim=1)).exp()
+        else:
+            return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))
+
+    
+    def cost_a(self,a,tensor=True):
+        if tensor:
+            return torch.zeros(a.shape[0],device=self.device)
+            # return 0.01 * a.pow(2).sum(dim=1)
         else:
             return 0.01 * np.sum(a**2)
-        
-        # if tensor:
-        #     return 0.01 * a.pow(2).sum(dim=1)
-        # else:
-        #     return 0.01 * np.sum(a**2)
+
 
     def step(self, action):
         # err_msg = "%r (%s) invalid" % (action, type(action))
