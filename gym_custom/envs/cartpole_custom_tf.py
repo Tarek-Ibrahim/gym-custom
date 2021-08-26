@@ -105,7 +105,7 @@ class CartPoleEnv(gym.Env):
 
     def cost_o(self,o,tensor=True):
         if tensor:
-            return tf.math.reduce_sum(tf.math.abs(o[:,2:3]),axis=1) + 0.01 * tf.math.reduce_sum(tf.math.abs(o[:,:1]),axis=1)
+            return tf.math.reduce_sum(tf.math.abs(o[:,2:3]),axis=1) #+ 0.01 * tf.math.reduce_sum(tf.math.abs(o[:,:1]),axis=1)
             # return -tf.math.exp(-tf.math.reduce_sum(tf.math.square(tf.concat([o[:,:1]-self.length*tf.math.sin(o[:,2:3]),-self.length*(tf.math.cos(o[:,2:3])+1)],axis=1)),axis=1)/(self.length**2))
         else:
             return -np.exp(-np.sum((np.array([o[0]-self.length*np.sin(o[2]),-self.length*(np.cos(o[2])+1)])/self.length)**2))

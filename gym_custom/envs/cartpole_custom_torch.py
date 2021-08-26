@@ -107,7 +107,7 @@ class CartPoleEnv(gym.Env):
     
     def cost_o(self,o,tensor=True):
         if tensor:
-            return torch.abs(o[:,2:3]).sum(dim=1) #+ 0.01 * torch.abs(o[:,:1]).sum(dim=1)
+            return torch.abs(o[:,2:3]).sum(dim=1) + 0.01 * torch.abs(o[:,:1]).sum(dim=1)
             # return -(-((torch.cat([o[:,:1]-self.length*o[:,2:3].sin(),-self.length*o[:,2:3].cos()-self.length],dim=1)/self.length).pow(2)).sum(dim=1)).exp()
         else:
             # return np.sum(np.abs(o[2]))
@@ -116,8 +116,8 @@ class CartPoleEnv(gym.Env):
     
     def cost_a(self,a,tensor=True):
         if tensor:
-            return torch.zeros(a.shape[0],device=self.device)
-            # return 0.01 * a.pow(2).sum(dim=1)
+            # return torch.zeros(a.shape[0],device=self.device)
+            return 0.01 * a.pow(2).sum(dim=1)
         else:
             # return 0.0
             return 0.01 * np.sum(a**2)
