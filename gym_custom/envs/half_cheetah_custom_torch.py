@@ -7,9 +7,9 @@ import os
 import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
-# from mujoco_py import mujoco_env
 import torch
 
+#TODO: implement it so that it works properly with correct cost functions and all
 
 class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
@@ -54,7 +54,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
     def cost_o(self,o):
         # return -o[:, 0]
-        return -o[:, 8]
+        return -o[:, 8] - (o[:,1].cos()+o[:,1].sin())
 
 
     def cost_a(self,a):
@@ -108,5 +108,6 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         return self._get_obs()
 
     def viewer_setup(self):
-        self.viewer.cam.distance = self.model.stat.extent * 0.25
-        self.viewer.cam.elevation = -55
+        self.viewer.cam.distance = self.model.stat.extent * 0.5
+        # self.viewer.cam.distance = self.model.stat.extent * 0.25
+        # self.viewer.cam.elevation = -55

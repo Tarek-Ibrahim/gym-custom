@@ -11,6 +11,8 @@ from gym.utils import seeding
 import numpy as np
 import torch
 
+#TODO: add obs and target pre and post proc funcs
+#TODO: code cleanup
 
 class CartPoleEnv(gym.Env):
     """
