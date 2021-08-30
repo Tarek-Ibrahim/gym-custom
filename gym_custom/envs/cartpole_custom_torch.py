@@ -11,7 +11,6 @@ from gym.utils import seeding
 import numpy as np
 import torch
 
-#TODO: add obs and target pre and post proc funcs
 #TODO: code cleanup
 
 class CartPoleEnv(gym.Env):
@@ -105,6 +104,16 @@ class CartPoleEnv(gym.Env):
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
+    
+    def obs_preproc(self, obs):
+        return obs
+    
+    def obs_postproc(self, obs, pred):
+        return obs + pred
+
+    
+    def targ_proc(self, obs, next_obs):
+        return next_obs - obs
     
     
     def cost_o(self,o,tensor=True):

@@ -7,7 +7,7 @@ import os
 import numpy as np
 from gym import utils
 from gym.envs.mujoco import mujoco_env
-import torch
+import tensorflow as tf
 
 #TODO: implement it so that it works properly with correct cost functions and all
 #TODO: code cleanup
@@ -18,42 +18,39 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         dir_path = os.path.dirname(os.path.realpath(__file__))
         mujoco_env.MujocoEnv.__init__(self, '%s/assets/half_cheetah.xml' % dir_path, 5)
         utils.EzPickle.__init__(self)
-        self.device=torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-
 
     def obs_preproc(self,obs):
         if isinstance(obs, np.ndarray):
             return np.concatenate([obs[:, 1:2], np.sin(obs[:, 2:3]), np.cos(obs[:, 2:3]), obs[:, 3:]], axis=1)
-        elif isinstance(obs, torch.Tensor):
-            return torch.cat([obs[:, 1:2],obs[:, 2:3].sin(),obs[:, 2:3].cos(),obs[:, 3:]], dim=1)
+        elif isinstance(obs, tf.Tensor):
+            return tf.concat([obs[:, 1:2],tf.math.sin(obs[:, 2:3]),tf.math.cos(obs[:, 2:3]),obs[:, 3:]], axis=1)
 
 
     def obs_postproc(self,obs, pred):
 
-        assert isinstance(obs, torch.Tensor)
+        assert isinstance(obs, tf.Tensor)
 
-        return torch.cat([pred[:, :1], obs[:, 1:] + pred[:, 1:]], dim=1)
+        return tf.concat([pred[:, :1], obs[:, 1:] + pred[:, 1:]], axis=1)
 
 
     def targ_proc(self,obs, next_obs):
 
         if isinstance(obs, np.ndarray):
             return np.concatenate([next_obs[:, :1], next_obs[:, 1:] - obs[:, 1:]], axis=1)
-        elif isinstance(obs, torch.Tensor):
-            return torch.cat([
+        elif isinstance(obs, tf.Tensor):
+            return tf.concat([
                 next_obs[:, :1],
                 next_obs[:, 1:] - obs[:, 1:]
-            ], dim=1)
+            ], axis=1)
 
 
     def cost_o(self,o):
         return -o[:, 0] ##
-        # return -o[:, 8] - (o[:,1].cos()+o[:,1].sin())
+        # return -o[:, 8] - (tf.math.cos(o[:,1])+tf.math.sin(o[:,1]))
 
 
     def cost_a(self,a):
-        # return torch.zeros(a.shape[0],device=self.device) 
-        return 0.1 * (a**2).sum(dim=1)
+        return 0.1 * tf.math.reduce_sum(tf.math.square(a),axis=1)
 
     
     # def step(self, action):
