@@ -27,21 +27,14 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
 
     def obs_postproc(self,obs, pred):
-
-        assert isinstance(obs, tf.Tensor)
-
         return tf.concat([pred[:, :1], obs[:, 1:] + pred[:, 1:]], axis=1)
 
 
     def targ_proc(self,obs, next_obs):
-
         if isinstance(obs, np.ndarray):
             return np.concatenate([next_obs[:, :1], next_obs[:, 1:] - obs[:, 1:]], axis=1)
         elif isinstance(obs, tf.Tensor):
-            return tf.concat([
-                next_obs[:, :1],
-                next_obs[:, 1:] - obs[:, 1:]
-            ], axis=1)
+            return tf.concat([next_obs[:, :1],next_obs[:, 1:] - obs[:, 1:]], axis=1)
 
 
     def cost_o(self,o):
