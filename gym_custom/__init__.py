@@ -17,7 +17,7 @@ register(
 register(
     id='halfcheetah_custom-v1',
     entry_point='gym_custom.envs:hce_torch',
-    max_episode_steps=200,
+    max_episode_steps=100, #1000
     reward_threshold=4800.0,
 )
 

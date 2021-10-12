@@ -11,7 +11,6 @@ from gym.utils import seeding
 import numpy as np
 import tensorflow as tf
 
-#TODO: code cleanup
 
 class CartPoleEnv(gym.Env):
     """
@@ -128,13 +127,10 @@ class CartPoleEnv(gym.Env):
             return tf.zeros(tf.shape(a)[0]) 
             # return 0.01 * tf.math.reduce_sum(tf.math.square(a),axis=1)
         else:
-            # return 0.0
             return 0.01 * np.sum(a**2)
         
         
     def step(self, action):
-        # err_msg = "%r (%s) invalid" % (action, type(action))
-        # assert self.action_space.contains(action), err_msg
 
         x, x_dot, theta, theta_dot = self.state
         action=np.clip(action[0], -1.0, 1.0)
