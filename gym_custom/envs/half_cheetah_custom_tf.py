@@ -14,16 +14,39 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def __init__(self):
         self.task = 1.0
         self.prev_qpos = None
+        self.action_mask=1.0
         dir_path = os.path.dirname(os.path.realpath(__file__))
         mujoco_env.MujocoEnv.__init__(self, '%s/assets/half_cheetah.xml' % dir_path, 5)
         utils.EzPickle.__init__(self)
+        self.init_geom_rgba=self.model.geom_rgba.copy()
     
     def sample_tasks(self, num_tasks): #gives -1 (backward) or +1 (forward) with 50% probability #manually designed p(T) #goal: going in different directions
         directions = 2 * self.np_random.binomial(1, p=0.5, size=(num_tasks,)) - 1
         return directions
     
-    def reset_task(self,task):
-        self.task=task
+    def sample_task(self): #samples joint idx to be disabled
+        return np.random.randint(0, self.action_space.shape[0])
+    
+    def reset_task(self,task, task_name):
+        
+        #environment-based
+        if task_name=="cripple":
+            self.action_mask=np.ones(self.action_space.shape)
+            self.action_mask[task]=0. #1.
+            
+            #disabled joint visualization
+            geom_idx = self.model.geom_names.index(self.model.joint_names[task+3])
+            if 'thigh' in self.model.joint_names[task+3]:
+                other=self.model.geom_names.index('torso')
+            else:
+                other=self.model.geom_names.index(self.model.joint_names[task+2])
+            geom_rgba = self.init_geom_rgba.copy()
+            geom_rgba[geom_idx, :3] = np.array([1, 0, 0])
+            geom_rgba[other, :3] = np.array([1, 0, 0])
+            self.model.geom_rgba[:] = geom_rgba
+            
+        else: #reward-based
+            self.task=task
 
     def obs_preproc(self,obs):
         if isinstance(obs, np.ndarray):
@@ -53,6 +76,8 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
 
     def step(self, action):
+        action=np.clip(action, self.action_space.low, self.action_space.high)
+        action=self.action_mask*action
         self.prev_qpos = np.copy(self.sim.data.qpos.flat) #self.sim.data.qpos
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
