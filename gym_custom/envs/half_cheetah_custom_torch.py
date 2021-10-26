@@ -96,7 +96,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle): #(HalfCheetahEnv_):
 
 
     def step(self, action):
-        action=np.clip(action, self.action_space.low, self.action_space.high)
+        # action=np.clip(action, self.action_space.low, self.action_space.high)
         action=self.action_mask*action
         self.prev_qpos = np.copy(self.sim.data.qpos.flat) #self.sim.data.qpos
         self.do_simulation(action, self.frame_skip)

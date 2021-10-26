@@ -94,6 +94,7 @@ class CartPoleEnv(gym.Env):
         self.seed()
         self.viewer = None
         self.state = None
+        self.action_mask=1.0
 
         self.steps_beyond_done = None
         
@@ -114,6 +115,8 @@ class CartPoleEnv(gym.Env):
     def targ_proc(self, obs, next_obs):
         return next_obs - obs
     
+    def sample_task(self): #samples actuator idx to be disabled
+        return np.random.randint(0, self.action_space.shape[0])
     
     def cost_o(self,o,tensor=True):
         if tensor:
@@ -131,6 +134,11 @@ class CartPoleEnv(gym.Env):
         else:
             return 0.01 * np.sum(a**2)
 
+
+    def reset_task(self,task, task_name):
+        
+        self.action_mask=np.ones(self.action_space.shape)
+        self.action_mask[task]=0.
 
     def step(self, action):
 
