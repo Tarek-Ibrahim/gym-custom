@@ -14,10 +14,18 @@ register(
     reward_threshold=195.0,
 )
 
+# register(
+#     id='halfcheetah_custom-v1',
+#     entry_point='gym_custom.envs:hce_torch',
+#     max_episode_steps= 200, #1000
+#     reward_threshold=4800.0,
+# )
+
 register(
     id='halfcheetah_custom-v1',
-    entry_point='gym_custom.envs:hce_torch',
-    max_episode_steps= 1000, #1000
+    entry_point='gym_custom.envs:wrapper',
+    kwargs={'entry_point': 'gym_custom.envs:hce_torch'},
+    max_episode_steps= 200, #1000
     reward_threshold=4800.0,
 )
 

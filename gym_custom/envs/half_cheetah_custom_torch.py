@@ -35,9 +35,10 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle): #(HalfCheetahEnv_):
         camera_id = self.model.camera_name2id('track')
         self.viewer.cam.type = 2
         self.viewer.cam.fixedcamid = camera_id
-        self.viewer.cam.distance = self.model.stat.extent * 0.35 #0.5 #0.25
+        self.viewer.cam.distance = self.model.stat.extent * 0.5 #0.5 #0.25
         # self.viewer.cam.elevation = -55
         self.viewer._hide_overlay = True
+        self.viewer._run_speed=0.1 
         
     def cost_a(self,a):
         return 0.1 * (a**2).sum(dim=1)
@@ -102,8 +103,8 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle): #(HalfCheetahEnv_):
         self.do_simulation(action, self.frame_skip)
         ob = self._get_obs()
         vel=(self.sim.data.qpos[0] - self.prev_qpos[0]) / self.dt
-        reward_ctrl = -0.1 * np.square(action).sum() # np.sum(np.square(action))
-        reward_run = ob[0] #self.task * vel #ob[0] 
+        reward_ctrl = -0.05 * np.square(action).sum() # np.sum(np.square(action))
+        reward_run = self.task * vel #ob[0] 
         reward = reward_run + reward_ctrl
 
         done = False
@@ -111,7 +112,7 @@ class HalfCheetahEnv(mujoco_env.MujocoEnv, utils.EzPickle): #(HalfCheetahEnv_):
 
     def _get_obs(self):
         return np.concatenate([
-            (self.sim.data.qpos.flat[:1] - self.prev_qpos[:1]) / self.dt,
+            # (self.sim.data.qpos.flat[:1] - self.prev_qpos[:1]) / self.dt,
             self.sim.data.qpos.flat[1:],
             self.sim.data.qvel.flat,
             self.get_body_com("torso").flat #+3 = center of mass coordinates
