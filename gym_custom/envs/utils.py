@@ -1,7 +1,8 @@
 from gym.envs.registration import load
-from normalized_env import NormalizedActionWrapper
+from .normalized_env import NormalizedActionWrapper
+from .randomized_env import RandomizedEnvWrapper
 
-def mujoco_wrapper(entry_point, **kwargs):
+def norm_wrapper(entry_point, **kwargs):
 
 	# Load the environment from its entry point
 	env_cls = load(entry_point)
@@ -10,3 +11,15 @@ def mujoco_wrapper(entry_point, **kwargs):
 	env = NormalizedActionWrapper(env)
 
 	return env
+
+
+def rand_wrapper(entry_point, **kwargs):
+
+	# Load the environment from its entry point
+	env_cls = load(entry_point)
+	env = env_cls(**kwargs)
+	# Randomization wrapper
+	env = RandomizedEnvWrapper(env)
+
+	return env
+
