@@ -74,6 +74,8 @@ class RandomizedEnvWrapper(gym.Wrapper):
                 self.unwrapped.dimensions[dimension].randomize()
 
         self.unwrapped._update_randomized_params()
+        
+        # return self.unwrapped.dimensions[0].current_value
 
     def step(self, action):
         return self.env.step(action)

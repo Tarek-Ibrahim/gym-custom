@@ -3,9 +3,9 @@
   "dimensions": [
     {
       "name": "main_engine",
-      "default": 12.0,
-      "multiplier_min": 0.92,
-      "multiplier_max": 1.08
+      "default": 11.0,
+      "multiplier_min": 1.0,
+      "multiplier_max": 1.2
     }
   ]
 }

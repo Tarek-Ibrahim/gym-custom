@@ -1,0 +1,17 @@
+{
+  "env": "HalfCheetahRandomized-v1",
+  "dimensions": [
+    {
+      "name": "floor",
+      "default": 0.4,
+      "multiplier_min": 1.0,
+      "multiplier_max": 2.0
+    }
+  ],
+  "geom_map" : {
+    "floor": ["floor"]
+  },
+  "suffixes": {
+    "floor": "0.1 0.1"
+  }
+}

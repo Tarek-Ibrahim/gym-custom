@@ -48,7 +48,8 @@ class RandomizedLocomotionEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             for geom in self.dimension_map[i]:
                 suffix = self.suffixes[i]
                 value = "{:3f} {}".format(self.dimensions[i].current_value, suffix)
-                geom.set('size', '{}'.format(value))
+                geom.set('friction', '{}'.format(value))
+                # geom.set('size', '{}'.format(value))
 
         return et.tostring(self.root, encoding='unicode', method='xml')
 

@@ -1,0 +1,12 @@
+{
+  "env": "CartPoleRandomized-v0",
+  "dimensions": [
+    {
+      "name": "mass_cart",
+      "default": 1.0,
+      "multiplier_min": 1.0,
+      "multiplier_max": 2.0
+    }
+    
+  ]
+}

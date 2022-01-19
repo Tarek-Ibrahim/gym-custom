@@ -64,7 +64,7 @@ class CartPoleEnv(gym.Env):
         'video.frames_per_second': 50
     }
 
-    def __init__(self):
+    def __init__(self,**kwargs):
         self.gravity = 9.8
         self.masscart = 1.0
         self.masspole = 0.1
@@ -98,6 +98,11 @@ class CartPoleEnv(gym.Env):
 
         self.steps_beyond_done = None
         
+        self.config_file = kwargs.get('config')
+    
+    
+    def _update_randomized_params(self):
+        self.masscart = self.dimensions[0].current_value    
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -142,7 +147,7 @@ class CartPoleEnv(gym.Env):
 
         x, x_dot, theta, theta_dot = self.state
         # action=np.clip(action[0], self.action_space.low, self.action_space.high)
-        action=np.clip(action[0], -1.0, 1.0)
+        action=np.clip(action[0], -1.0, 1.0) if isinstance(action,np.ndarray) else np.clip(action, -1.0, 1.0)
         force = action * self.force_mag
         costheta = math.cos(theta)
         sintheta = math.sin(theta)
