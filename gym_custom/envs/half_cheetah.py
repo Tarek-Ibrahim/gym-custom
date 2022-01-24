@@ -84,6 +84,16 @@ class HalfCheetahRandomizedEnv(RandomizedLocomotionEnv):
         qvel = self.init_qvel + self.np_random.randn(self.model.nv) * .1
         self.set_state(qpos, qvel)
         return self._get_obs()
-
+    
     def viewer_setup(self):
-        self.viewer.cam.distance = self.model.stat.extent * 0.5
+        camera_id = self.model.camera_name2id('track')
+        self.viewer.cam.type = 2
+        self.viewer.cam.fixedcamid = camera_id
+        self.viewer.cam.distance = self.model.stat.extent * 0.5 #0.5 #0.25
+        # self.viewer.cam.elevation = -55
+        # self.viewer.cam.elevation = 40
+        self.viewer._hide_overlay = True
+        self.viewer._run_speed=0.25 #0.1 
+
+    # def viewer_setup(self):
+    #     self.viewer.cam.distance = self.model.stat.extent * 0.5

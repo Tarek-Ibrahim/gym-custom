@@ -56,6 +56,12 @@ class RandomizedLocomotionEnv(mujoco_env.MujocoEnv, utils.EzPickle):
     def _update_randomized_params(self):
         xml = self._create_xml()
         self._re_init(xml)
+        
+        # print(self.root.find(".//geom[@name='{}']".format('floor')).get('friction'))
+        
+        # for i, bodypart in enumerate(self.dimensions):
+        #     for geom in self.dimension_map[i]:
+        #         print(geom.get('size'))
 
     def _re_init(self, xml):
         self.model = mujoco_py.load_model_from_xml(xml)
