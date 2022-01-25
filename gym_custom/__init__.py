@@ -55,7 +55,8 @@ register(
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
             'xml_name':'half_cheetah.xml',
-            'config': CONFIG_PATH + '\\halfcheetah\\default.json'},
+            'config': CONFIG_PATH + '\\halfcheetah\\default.json',
+            'rand': 'size'}, #limbs sizes/lengths to randomzie
     max_episode_steps= 200, #1000
     reward_threshold=4800.0,
 )
@@ -66,7 +67,8 @@ register(
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
             'xml_name':'half_cheetah.xml',
-            'config': CONFIG_PATH + '\\halfcheetah\\friction.json'},
+            'config': CONFIG_PATH + '\\halfcheetah\\friction.json',
+            'rand': 'friction'}, #floor friction to randomize
     max_episode_steps= 200, #1000
     reward_threshold=4800.0,
 )
