@@ -90,7 +90,8 @@ register(
     entry_point='gym_custom.envs:rand_wrapper',
     max_episode_steps=1000,
     kwargs={'entry_point': 'gym_custom.envs:lle_rand',
-            'config': CONFIG_PATH + '\\lunarlander\\default.json'}
+            'config': CONFIG_PATH + '\\lunarlander\\default.json',
+            'rand': 'strength'}
 )
 
 register(

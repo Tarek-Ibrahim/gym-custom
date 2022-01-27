@@ -111,6 +111,7 @@ class LunarLanderRandomized(gym.Env, EzPickle):
         self.config_file = kwargs.get('config')
         self.main_engine_power = 13.0
         self.side_engine_power = 6.0
+        self.rand=kwargs.get('rand')
 
         self.reset()
 
