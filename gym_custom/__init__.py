@@ -1,5 +1,6 @@
 from gym.envs.registration import register
 from .envs.config import CONFIG_PATH
+import os
 
 #===============
 # Cartpole
@@ -24,7 +25,7 @@ register(
     id='cartpole_custom_rand-v2',
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:cpe_tf',
-            'config': CONFIG_PATH + '\\cartpole\\default.json'},
+            'config': os.path.join(CONFIG_PATH, "cartpole","default.json")},
     max_episode_steps=200,
     reward_threshold=195.0,
 )
@@ -55,7 +56,7 @@ register(
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
             'xml_name':'half_cheetah.xml',
-            'config': CONFIG_PATH + '\\halfcheetah\\default.json',
+            'config': os.path.join(CONFIG_PATH, "halfcheetah","default.json"),
             'rand': 'size'}, #limbs sizes/lengths to randomzie
     max_episode_steps= 200, #1000
     reward_threshold=4800.0,
@@ -67,7 +68,7 @@ register(
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
             'xml_name':'half_cheetah.xml',
-            'config': CONFIG_PATH + '\\halfcheetah\\friction.json',
+            'config': os.path.join(CONFIG_PATH, "halfcheetah","friction.json"),
             'rand': 'friction'}, #floor friction to randomize
     max_episode_steps= 200, #1000
     reward_threshold=4800.0,
