@@ -19,7 +19,7 @@ def rand_wrapper(entry_point, **kwargs):
 	env_cls = load(entry_point)
 	env = env_cls(**kwargs)
 	# Randomization wrapper
-	env = RandomizedEnvWrapper(env)
+	env = NormalizedActionWrapper(RandomizedEnvWrapper(env))
 
 	return env
 
