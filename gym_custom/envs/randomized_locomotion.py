@@ -16,7 +16,7 @@ class RandomizedLocomotionEnv(mujoco_env.MujocoEnv, utils.EzPickle):
         mujoco_env.MujocoEnv.__init__(self, kwargs.get('xml_name'), frame_skip=5)
 
         # randomization
-        self.reference_path = os.path.join(os.path.dirname(mujoco_env.__file__), "assets", kwargs.get('xml_name'))
+        self.reference_path = kwargs.get('xml_name')
         self.reference_xml = et.parse(self.reference_path)
         self.config_file = kwargs.get('config')
         self.rand = kwargs.get('rand')
@@ -36,7 +36,10 @@ class RandomizedLocomotionEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             name = entry["name"]
             self.dimension_map.append([])
             for geom in config["geom_map"][name]:
-                self.dimension_map[-1].append(self.root.find(".//geom[@name='{}']".format(geom)))
+                if self.rand == "friction":
+                    self.dimension_map[-1].append(self.root.find(".//default//geom"))
+                else:
+                    self.dimension_map[-1].append(self.root.find(".//geom[@name='{}']".format(geom)))
 
             if check_suffixes:
                 suffix = config['suffixes'].get(name, "")

@@ -14,12 +14,14 @@ def norm_wrapper(entry_point, **kwargs):
 
 
 def rand_wrapper(entry_point, **kwargs):
-
-	# Load the environment from its entry point
-	env_cls = load(entry_point)
-	env = env_cls(**kwargs)
-	# Randomization wrapper
-	env = NormalizedActionWrapper(RandomizedEnvWrapper(env))
-
-	return env
+    
+    # Load the environment from its entry point
+    env_cls = load(entry_point)
+    env = env_cls(**kwargs)
+    
+    # Randomization wrapper
+    env = NormalizedActionWrapper(RandomizedEnvWrapper(env))
+    # env = RandomizedEnvWrapper(env)
+    
+    return env
 

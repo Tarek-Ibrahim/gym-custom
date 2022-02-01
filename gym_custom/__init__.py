@@ -1,5 +1,6 @@
 from gym.envs.registration import register
 from .envs.config import CONFIG_PATH
+from.envs.assets import MODEL_PATH
 import os
 
 #===============
@@ -55,7 +56,7 @@ register(
     id='halfcheetah_custom_rand-v1',
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
-            'xml_name':'half_cheetah.xml',
+            'xml_name': os.path.join(MODEL_PATH,"half_cheetah.xml"), #'half_cheetah.xml',
             'config': os.path.join(CONFIG_PATH, "halfcheetah","default.json"),
             'rand': 'size'}, #limbs sizes/lengths to randomzie
     max_episode_steps= 200, #1000
@@ -67,7 +68,7 @@ register(
     id='halfcheetah_custom_rand-v2',
     entry_point='gym_custom.envs:rand_wrapper',
     kwargs={'entry_point': 'gym_custom.envs:hce_rand',
-            'xml_name':'half_cheetah.xml',
+            'xml_name': os.path.join(MODEL_PATH,"half_cheetah.xml"), #'half_cheetah.xml',
             'config': os.path.join(CONFIG_PATH, "halfcheetah","friction.json"),
             'rand': 'friction'}, #floor friction to randomize
     max_episode_steps= 200, #1000
