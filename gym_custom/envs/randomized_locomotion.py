@@ -36,8 +36,8 @@ class RandomizedLocomotionEnv(mujoco_env.MujocoEnv, utils.EzPickle):
             name = entry["name"]
             self.dimension_map.append([])
             for geom in config["geom_map"][name]:
-                if self.rand == "friction":
-                    self.dimension_map[-1].append(self.root.find(".//default//geom"))
+                if self.rand == "damping":
+                    self.dimension_map[-1].append(self.root.find(".//default//joint"))
                 else:
                     self.dimension_map[-1].append(self.root.find(".//geom[@name='{}']".format(geom)))
 

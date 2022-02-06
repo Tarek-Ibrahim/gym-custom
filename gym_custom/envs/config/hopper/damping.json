@@ -1,0 +1,17 @@
+{
+  "env": "HopperRandomized-v1",
+  "dimensions": [
+    {
+      "name": "floor",
+      "default": 1.0,
+      "multiplier_min": 0.0,
+      "multiplier_max": 4.0
+    }
+  ],
+  "geom_map" : {
+    "floor": ["floor"]
+  },
+  "suffixes": {
+    "floor": ""
+  }
+}

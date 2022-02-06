@@ -10,6 +10,8 @@ from gym_custom.envs.cartpole_custom_tf import CartPoleEnv as cpe_tf
 from gym_custom.envs.half_cheetah_custom_torch import HalfCheetahEnv as hce_torch
 from gym_custom.envs.half_cheetah import HalfCheetahRandomizedEnv as hce_rand
 from gym_custom.envs.half_cheetah_custom_tf import HalfCheetahEnv as hce_tf
+#hopper
+from gym_custom.envs.hopper import HopperRandomizedEnv as he_rand
 
 #box2d
 #lunar lander
