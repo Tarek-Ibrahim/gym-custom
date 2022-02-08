@@ -1,0 +1,17 @@
+{
+  "env": "HopperRandomized-v2",
+  "dimensions": [
+    {
+      "name": "foot_geom",
+      "default": 2.0,
+      "multiplier_min": 0.1,
+      "multiplier_max": 1.2
+    }
+  ],
+  "geom_map" : {
+    "foot_geom": ["foot_geom"]
+  },
+  "suffixes": {
+    "foot_geom": "0.1 0.1"
+  }
+}

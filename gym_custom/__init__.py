@@ -3,6 +3,7 @@ from .envs.config import CONFIG_PATH
 from.envs.assets import MODEL_PATH
 import os
 
+#%%
 #===============
 # Cartpole
 #===============
@@ -32,6 +33,7 @@ register(
 )
 
 
+#%%
 #===============
 # Half-Cheetah
 #===============
@@ -84,6 +86,7 @@ register(
 )
 
 
+#%%
 #=========
 # Hopper
 #=========
@@ -101,6 +104,19 @@ register(
 )
 
 
+register(
+    id='hopper_custom_rand-v2',
+    entry_point='gym_custom.envs:rand_wrapper',
+    kwargs={'entry_point': 'gym_custom.envs:he_rand',
+            'xml_name': os.path.join(MODEL_PATH,"hopper.xml"), #'half_cheetah.xml',
+            'config': os.path.join(CONFIG_PATH, "hopper","friction.json"),
+            'rand': 'friction'}, #floor friction to randomize
+    max_episode_steps= 1000,
+    reward_threshold=3800.0,
+)
+
+
+#%%
 #===============
 # Lunar Lander
 #===============
