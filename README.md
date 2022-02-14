@@ -1,3 +1,3 @@
 # gym-custom
 
-custom cartpole gym environment
+custom gym environments
