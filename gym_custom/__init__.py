@@ -61,7 +61,7 @@ register(
             'xml_name': os.path.join(MODEL_PATH,"half_cheetah.xml"),
             'config': os.path.join(CONFIG_PATH, "halfcheetah","default.json"),
             'rand': 'size'}, #limbs sizes/lengths to randomzie
-    max_episode_steps= 200, #1000
+    max_episode_steps= 500, #200 #1000
     reward_threshold=4800.0,
 )
 
@@ -73,7 +73,7 @@ register(
             'xml_name': os.path.join(MODEL_PATH,"half_cheetah.xml"),
             'config': os.path.join(CONFIG_PATH, "halfcheetah","friction.json"),
             'rand': 'friction'},
-    max_episode_steps= 200, #1000
+    max_episode_steps= 500, #200 #1000
     reward_threshold=4800.0,
 )
 
