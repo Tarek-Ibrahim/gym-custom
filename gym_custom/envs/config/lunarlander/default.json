@@ -3,7 +3,7 @@
   "dimensions": [
     {
       "name": "main_engine",
-      "default": 11.0,
+      "default": 13.0,
       "multiplier_min": 1.0,
       "multiplier_max": 1.2
     }
