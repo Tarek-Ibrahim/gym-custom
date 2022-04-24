@@ -132,6 +132,18 @@ class HopperRandomizedEnv(RandomizedLocomotionEnv):
         # mujoco_env.MujocoEnv.__init__(self, "hopper.xml", 4)
         # utils.EzPickle.__init__(self)
         RandomizedLocomotionEnv.__init__(self, **kwargs)
+        
+    def reward(self,s,a,s_dash):
+        alive_bonus=1.0
+        reward = s_dash[:,5]
+        reward += alive_bonus
+        reward -= 1e-3 * np.square(a).sum(1)
+        
+        return reward
+    
+    def done(self,s):
+        notdone = np.all(np.isfinite(s), axis=1) * (np.abs(s[:, 3:]) < 100).all(axis=1) * (s[:, 0] > 0.7) * (np.abs(s[:, 1]) < 0.2)
+        return np.logical_not(notdone)
 
     def step(self, a):
         posbefore = self.sim.data.qpos[0]

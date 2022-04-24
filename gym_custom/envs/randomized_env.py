@@ -65,7 +65,7 @@ class RandomizedEnvWrapper(gym.Wrapper):
         to randomize over
         """
         for dimension, randomized_value in enumerate(randomized_values):
-            if randomized_value == 'default':
+            if randomized_value == 'default' or randomized_value==-2:
                 self.unwrapped.dimensions[dimension].current_value = self.unwrapped.dimensions[dimension].default_value
             elif randomized_value != 'random' and randomized_value != -1:
                 assert 0.0 <= randomized_value <= 1.0, "using incorrect: {}".format(randomized_value)

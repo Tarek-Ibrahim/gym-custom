@@ -74,7 +74,7 @@ register(
             'config': os.path.join(CONFIG_PATH, "halfcheetah","friction.json"),
             'rand': 'friction'},
     max_episode_steps= 500, #200 #1000
-    reward_threshold=4800.0,
+    reward_threshold=300.0, #4800.0,
 )
 
 
@@ -112,7 +112,7 @@ register(
             'config': os.path.join(CONFIG_PATH, "hopper","friction.json"),
             'rand': 'friction'}, #floor friction to randomize
     max_episode_steps= 1000,
-    reward_threshold=3800.0,
+    reward_threshold=1500.0, #3800.0,
 )
 
 
@@ -150,6 +150,7 @@ register(
     id='lunarlander_custom_820_rand-v0',
     entry_point='gym_custom.envs:rand_wrapper',
     max_episode_steps=1000,
+    reward_threshold=200.0,
     kwargs={'entry_point': 'gym_custom.envs:lle_rand',
             'config': os.path.join(CONFIG_PATH, "lunarlander","random_820.json"),
             'rand': 'strength'}

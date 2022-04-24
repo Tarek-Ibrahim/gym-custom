@@ -38,6 +38,13 @@ class HalfCheetahRandomizedEnv(RandomizedLocomotionEnv):
         else: #reward-based
             self.task=task
     
+    @staticmethod
+    def reward(s,a,s_dash):
+        reward_run= s_dash[...,8]
+        reward_ctrl = -0.05 * np.square(a).sum(-1)
+        reward = reward_run + reward_ctrl
+        return reward
+    
     def step(self, action):
         # action=np.clip(action, self.action_space.low, self.action_space.high)
         action=self.action_mask*action
