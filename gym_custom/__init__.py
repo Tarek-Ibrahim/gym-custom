@@ -112,7 +112,7 @@ register(
             'config': os.path.join(CONFIG_PATH, "hopper","friction.json"),
             'rand': 'friction'}, #floor friction to randomize
     max_episode_steps= 1000,
-    reward_threshold=1500.0, #3800.0,
+    reward_threshold=1200.0, #3800.0,
 )
 
 
